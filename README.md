@@ -1,20 +1,18 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Souq M3alem Project
 
-# Run and deploy your AI Studio app
+This project is built with React, Vite, and Express.
 
-This contains everything you need to run your app locally.
+## Cloudflare Pages Deployment Instructions
 
-View your app in AI Studio: https://ai.studio/apps/71515a9e-f018-4838-8598-3f8bbe9bc620
+If you are deploying this to **Cloudflare Pages**, use the following settings in the Cloudflare dashboard:
 
-## Run Locally
+1.  **Framework Preset:** `Vite` (or None)
+2.  **Build Command:** `npm run build`
+3.  **Build Output Directory:** `dist`
+4.  **Root Directory:** `/` (Default)
 
-**Prerequisites:**  Node.js
+### Note on _redirects
+A `public/_redirects` file has been added to handle Single Page Application (SPA) routing on Cloudflare.
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Note on Backend
+This app uses a full-stack architecture. Cloudflare Pages (Static) will only host the frontend. If your app requires the `server.ts` logic (like Gemini API calls), you may need to adapt it for Cloudflare Workers or use a provider like Cloud Run/Vercel that supports Node.js backends.
