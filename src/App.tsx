@@ -38,55 +38,51 @@ import PremiumServices from './components/PremiumServices';
 import { useLocation } from 'react-router-dom';
 
 // Navigation Wrapper to handle active state
-function NavigationContent({ user, setShowCihModal }: any) {
+function NavigationContent({ user }: any) {
   const location = useLocation();
   const path = location.pathname;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-100 px-6 py-3 pb-6 sm:pb-3">
-      <div className="max-w-xl mx-auto flex items-center justify-between relative">
-        <Link to="/" className={`flex flex-col items-center gap-1.5 group ${path === '/' ? 'text-orange-600' : 'text-gray-400'}`}>
-          <div className={`p-1 rounded-xl transition-colors ${path === '/' ? 'text-orange-600' : 'group-hover:text-orange-600'}`}>
-            <Home size={22} fill={path === '/' ? 'currentColor' : 'none'} fillOpacity={path === '/' ? 0.1 : 0} />
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-100 pb-8 pt-2 px-2 shadow-[0_-5px_15px_rgba(0,0,0,0.03)] sm:pb-3">
+      <div className="max-w-xl mx-auto flex items-end justify-between relative px-2">
+        
+        <Link to="/profile" className={`flex-1 flex flex-col items-center gap-1 group transition-all ${path === '/profile' ? 'text-orange-600' : 'text-gray-400'}`}>
+          <div className="relative">
+             {user ? (
+               <div className={`w-6 h-6 rounded-full overflow-hidden border-2 transition-all ${path === '/profile' ? 'border-orange-500' : 'border-gray-200'}`}>
+                  <img src={user.photoURL || ''} alt="User" className="w-full h-full object-cover" />
+               </div>
+             ) : (
+               <UserCircle size={24} strokeWidth={path === '/profile' ? 2.5 : 2} />
+             )}
           </div>
-          <span className="text-[10px] font-black">الرئيسية</span>
+          <span className="text-[10px] font-black">حسابي</span>
         </Link>
         
-        <Link to="/courses" className={`flex flex-col items-center gap-1.5 group ${path === '/courses' ? 'text-orange-600' : 'text-gray-400'}`}>
-           <div className={`p-1 rounded-xl transition-colors ${path === '/courses' ? 'text-orange-600' : 'group-hover:text-orange-600'}`}>
-             <BookOpen size={22} fill={path === '/courses' ? 'currentColor' : 'none'} fillOpacity={path === '/courses' ? 0.1 : 0} />
-           </div>
-           <span className="text-[10px] font-black">تكوين</span>
+        <Link to="/favorites" className={`flex-1 flex flex-col items-center gap-1 group transition-all ${path === '/favorites' ? 'text-orange-600' : 'text-gray-400'}`}>
+          <Star size={24} fill={path === '/favorites' ? 'currentColor' : 'none'} fillOpacity={0.2} strokeWidth={path === '/favorites' ? 2.5 : 2} />
+          <span className="text-[10px] font-black">المفضلة</span>
         </Link>
 
-        <Link to="/inquiries" className={`flex flex-col items-center gap-1.5 group ${path === '/inquiries' ? 'text-orange-600' : 'text-gray-400'}`}>
-           <div className={`p-1 rounded-xl transition-colors ${path === '/inquiries' ? 'text-orange-600' : 'group-hover:text-orange-600'}`}>
-             <MessageSquare size={22} fill={path === '/inquiries' ? 'currentColor' : 'none'} fillOpacity={path === '/inquiries' ? 0.1 : 0} />
-           </div>
-           <span className="text-[10px] font-black">استشكالات</span>
+        {/* Center Add Button */}
+        <div className="flex-1 flex justify-center -mt-6">
+          <Link 
+            to="/add/product" 
+            className="w-16 h-16 bg-[#FF6B00] text-white rounded-2xl flex flex-col items-center justify-center shadow-[0_8px_20px_rgba(255,107,0,0.4)] border-4 border-white hover:scale-105 active:scale-95 transition-all"
+          >
+            <Plus size={32} strokeWidth={3} />
+            <span className="text-[9px] font-black -mt-1">أضف إعلان</span>
+          </Link>
+        </div>
+
+        <Link to="/courses" className={`flex-1 flex flex-col items-center gap-1 group transition-all ${path === '/courses' ? 'text-orange-600' : 'text-gray-400'}`}>
+          <BookOpen size={24} strokeWidth={path === '/courses' ? 2.5 : 2} />
+          <span className="text-[10px] font-black">الدورات</span>
         </Link>
 
-        <Link to="/entertainment" className={`flex flex-col items-center gap-1.5 group ${path === '/entertainment' ? 'text-orange-600' : 'text-gray-400'}`}>
-           <div className={`p-1 rounded-xl transition-colors ${path === '/entertainment' ? 'text-orange-600' : 'group-hover:text-orange-600'}`}>
-             <Gamepad2 size={24} fill={path === '/entertainment' ? 'currentColor' : 'none'} fillOpacity={path === '/entertainment' ? 0.1 : 0} />
-           </div>
-           <span className="text-[10px] font-black">ألعاب وربح</span>
-        </Link>
-
-        <Link 
-          to="/profile"
-          className={`flex flex-col items-center gap-1.5 group ${path === '/profile' ? 'text-orange-600' : 'text-gray-400'}`}
-        >
-           {user ? (
-             <div className={`w-6 h-6 rounded-full overflow-hidden border-2 transition-all ${path === '/profile' ? 'border-orange-500' : 'border-gray-100 group-hover:border-orange-200'}`}>
-                <img src={user.photoURL || ''} alt="User" className="w-full h-full object-cover" />
-             </div>
-           ) : (
-             <div className={`p-1 rounded-xl transition-colors ${path === '/profile' ? 'text-orange-600' : 'group-hover:text-orange-600'}`}>
-               <UserCircle size={22} fill={path === '/profile' ? 'currentColor' : 'none'} fillOpacity={path === '/profile' ? 0.1 : 0} />
-             </div>
-           )}
-           <span className="text-[10px] font-black">{user ? (user.displayName?.split(' ')[0] || 'حسابي') : 'حسابي'}</span>
+        <Link to="/" className={`flex-1 flex flex-col items-center gap-1 group transition-all ${path === '/' ? 'text-orange-600' : 'text-gray-400'}`}>
+          <Home size={24} fill={path === '/' ? 'currentColor' : 'none'} fillOpacity={0.2} strokeWidth={path === '/' ? 2.5 : 2} />
+          <span className="text-[10px] font-black">الرئيسية</span>
         </Link>
       </div>
     </div>
@@ -127,35 +123,32 @@ export default function App() {
         {/* Navigation Bar */}
         <nav className="sticky top-0 z-50 bg-[#FF6B00] px-4 py-3">
           <div className="max-w-xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-3">
-               <Link to="/premium" className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-lg flex items-center gap-1 text-[10px] font-black text-white shadow-[0_0_15px_rgba(250,204,21,0.5)] cursor-pointer hover:scale-105 transition-transform border border-yellow-300">
-                  <Crown size={12} fill="currentColor" />
-                  VIP
-               </Link>
-               <div 
+            <div className="flex items-center gap-2">
+               <button 
                  onClick={() => setShowRateModal(true)}
-                 className="px-3 py-1 bg-[#FFD700] rounded-lg flex items-center gap-1 text-[10px] font-black text-orange-900 shadow-sm cursor-pointer hover:bg-yellow-300"
+                 className="px-3 py-1.5 bg-white/20 hover:bg-white/30 rounded-xl flex items-center gap-1.5 text-[10px] font-black text-white transition-colors"
                >
-                  <Star size={12} fill="currentColor" />
+                  <Star size={14} className="text-yellow-400" fill="currentColor" />
                   قيمنا
-               </div>
+               </button>
+               <Link to="/settings" className="p-2 text-white/80 hover:text-white transition-colors">
+                 <Settings size={22} strokeWidth={2.5} />
+               </Link>
             </div>
             
-            <Link to="/" className="text-center">
-              <h1 className="text-2xl font-black text-white leading-none tracking-tighter">سوق المعلم</h1>
-              <div className="flex items-center justify-center gap-1 text-[8px] font-bold text-orange-100 mt-0.5 opacity-80 uppercase">
-                <span>V5 FINAL</span>
-                <span className="opacity-50">•</span>
-                <span>بيع و شراء</span>
+            <Link to="/" className="flex items-center gap-2">
+              <div className="text-right">
+                <h1 className="text-2xl font-black text-white leading-none tracking-tighter">سوق المعلم</h1>
+                <div className="flex items-center justify-end gap-1 text-[8px] font-bold text-orange-100 mt-0.5 opacity-80 uppercase">
+                  <span>V5 FINAL</span>
+                  <span className="opacity-50">•</span>
+                  <span>بيع و شراء</span>
+                </div>
+              </div>
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg transform rotate-3">
+                <Wrench className="text-[#FF6B00]" size={24} strokeWidth={2.5} />
               </div>
             </Link>
-
-            <div className="flex items-center gap-2">
-              <Link to="/add/product" className="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-xl flex items-center gap-1 font-bold text-xs transition-colors">
-                <Plus size={16} strokeWidth={2.5} />
-                أضف إعلان
-              </Link>
-            </div>
           </div>
         </nav>
 
