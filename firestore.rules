@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isSignedIn() { return request.auth != null; }
+
+    function isValidListing(data) {
+      return data.keys().hasAll(['title', 'description', 'phone', 'city', 'type', 'ownerId', 'ownerName', 'createdAt', 'updatedAt', 'status'])
+        && data.title is string && data.title.size() > 0 && data.title.size() <= 200
+        && data.description is string && data.description.size() > 0 && data.description.size() <= 5000
+        && data.phone is string && data.phone.size() <= 20
+        && data.city is string && data.city.size() <= 100
+        && data.type is string && (data.type == 'product' || data.type == 'service' || data.type == 'course' || data.type == 'inquiry')
+        && data.ownerId == request.auth.uid
+        && (data.ownerName == null || (data.ownerName is string && data.ownerName.size() <= 100))
+        && (data.ownerPhoto == null || (data.ownerPhoto is string && data.ownerPhoto.size() <= 2000))
+        && data.createdAt == request.time
+        && data.updatedAt == request.time
+        && data.status is string && data.status == 'active'
+        && (data.price == null || data.price == '' || (data.price is string && data.price.size() <= 100));
+    }
+
+    match /listings/{listingId} {
+      allow get: if isValidId(listingId);
+      allow list: if resource.data.status == 'active' || resource.data.status == 'inactive';
+      
+      allow create: if isValidId(listingId) && isSignedIn() && isValidListing(incoming());
+      
+      allow update: if isValidId(listingId) && isSignedIn() && existing().ownerId == request.auth.uid && incoming().ownerId == existing().ownerId && incoming().createdAt == existing().createdAt && incoming().updatedAt == request.time && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'description', 'phone', 'city', 'type', 'price', 'updatedAt', 'status', 'ownerName', 'ownerPhoto']) && (incoming().title is string && incoming().title.size() > 0 && incoming().title.size() <= 200) && (incoming().description is string && incoming().description.size() > 0 && incoming().description.size() <= 5000) && (incoming().phone is string && incoming().phone.size() <= 20) && (incoming().city is string && incoming().city.size() <= 100) && (incoming().type is string && (incoming().type == 'product' || incoming().type == 'service' || incoming().type == 'course' || incoming().type == 'inquiry')) && (incoming().status is string && (incoming().status == 'active' || incoming().status == 'inactive')) && (incoming().price == null || incoming().price == '' || (incoming().price is string && incoming().price.size() <= 100));
+      
+      allow delete: if isValidId(listingId) && isSignedIn() && existing().ownerId == request.auth.uid;
+    }
+
+    function isValidChatMessage(data) {
+      return data.keys().hasAll(['text', 'userId', 'userName', 'channelId', 'createdAt'])
+        && data.text is string && data.text.size() > 0 && data.text.size() <= 1000
+        && data.userId == request.auth.uid
+        && (data.userName == null || (data.userName is string && data.userName.size() <= 100))
+        && (data.userPhoto == null || (data.userPhoto is string && data.userPhoto.size() <= 2000))
+        && data.channelId is string && data.channelId == 'global'
+        && data.createdAt == request.time;
+    }
+
+    match /global_chat/{messageId} {
+      allow get: if isValidId(messageId);
+      allow list: if resource.data.channelId == 'global';
+      
+      allow create: if isValidId(messageId) && isSignedIn() && isValidChatMessage(incoming());
+      allow update: if false;
+      allow delete: if isValidId(messageId) && isSignedIn() && existing().userId == request.auth.uid;
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "entities": {
+    "Listing": {
+      "title": "Listing",
+      "description": "Represents a product, service, course, or inquiry.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "string" },
+        "city": { "type": "string" },
+        "phone": { "type": "string" },
+        "type": { "type": "string", "enum": ["product", "service", "course", "inquiry"] },
+        "ownerId": { "type": "string" },
+        "ownerName": { "type": "string" },
+        "ownerPhoto": { "type": "string" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" },
+        "status": { "type": "string", "enum": ["active", "inactive"] }
+      },
+      "required": ["title", "description", "phone", "city", "type", "ownerId", "ownerName", "createdAt", "updatedAt", "status"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Represents a chat message in the global chat.",
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userPhoto": { "type": "string" },
+        "channelId": { "type": "string", "enum": ["global"] },
+        "createdAt": { "type": "timestamp" }
+      },
+      "required": ["text", "userId", "userName", "channelId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/listings/{listingId}": {
+      "schema": { "$ref": "#/entities/Listing" },
+      "description": "Listings collection."
+    },
+    "/global_chat/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "Global chat messages."
+    }
+  }
+}

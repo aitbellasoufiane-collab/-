@@ -1,0 +1,8 @@
+{
+  "name": "Remix: سوق المعلم",
+  "description": "منصة سوق المعلم للحرفيين المغاربة للبيع والشراء في مختلف المجالات: المنتجات، الخدمات، والدورات التكوينية، مع دعم لإعلانات جوجل وطرق الدفع المحلية.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
